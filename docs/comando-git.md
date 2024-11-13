@@ -1,7 +1,7 @@
 # Comandos GitHub
 Referencia del repositorio local con el repositorio remoto  (GITHUB)
 ````
-git remote add origin https://github.com/cof13/front_angular_nest.git
+git remote add origin https://github.com/cof13/front_angular_nest_4A.git
 ````
 # Inicializar el repositorio local
 ```
