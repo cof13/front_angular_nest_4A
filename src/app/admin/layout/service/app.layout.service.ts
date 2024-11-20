@@ -1,4 +1,5 @@
-import { Injectable, effect, signal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable, effect, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 
 export interface AppConfig {
@@ -51,7 +52,7 @@ export class LayoutService {
 
     overlayOpen$ = this.overlayOpen.asObservable();
 
-    constructor() {
+    constructor(@Inject(DOCUMENT) private document: Document) {
         effect(() => {
             const config = this.config();
             if (this.updateStyle(config)) {
@@ -120,7 +121,7 @@ export class LayoutService {
 
     changeTheme() {
         const config = this.config();
-        const themeLink = <HTMLLinkElement>document.getElementById('theme-css');
+        const themeLink = <HTMLLinkElement>this.document.getElementById('theme-css');
         const themeLinkHref = themeLink.getAttribute('href')!;
         const newHref = themeLinkHref
             .split('/')
@@ -137,7 +138,7 @@ export class LayoutService {
     }
     replaceThemeLink(href: string) {
         const id = 'theme-css';
-        let themeLink = <HTMLLinkElement>document.getElementById(id);
+        let themeLink = <HTMLLinkElement>this.document.getElementById(id);
         const cloneLinkElement = <HTMLLinkElement>themeLink.cloneNode(true);
 
         cloneLinkElement.setAttribute('href', href);
@@ -154,6 +155,6 @@ export class LayoutService {
     }
 
     changeScale(value: number) {
-        document.documentElement.style.fontSize = `${value}px`;
+        this.document.documentElement.style.fontSize = `${value}px`;
     }
 }

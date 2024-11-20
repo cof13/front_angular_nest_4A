@@ -1,9 +1,10 @@
-import { Component, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { LayoutService } from "./service/app.layout.service";
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppTopBarComponent } from './app.topbar.component';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
     selector: 'app-layout',
@@ -21,7 +22,7 @@ export class AppLayoutComponent implements OnDestroy {
 
     @ViewChild(AppTopBarComponent) appTopbar!: AppTopBarComponent;
 
-    constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
+    constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router, @Inject(DOCUMENT) private document: Document) {
         this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
             if (!this.menuOutsideClickListener) {
                 this.menuOutsideClickListener = this.renderer.listen('document', 'click', event => {
@@ -77,20 +78,20 @@ export class AppLayoutComponent implements OnDestroy {
     }
 
     blockBodyScroll(): void {
-        if (document.body.classList) {
-            document.body.classList.add('blocked-scroll');
+        if (this.document.body.classList) {
+            this.document.body.classList.add('blocked-scroll');
         }
         else {
-            document.body.className += ' blocked-scroll';
+            this.document.body.className += ' blocked-scroll';
         }
     }
 
     unblockBodyScroll(): void {
-        if (document.body.classList) {
-            document.body.classList.remove('blocked-scroll');
+        if (this.document.body.classList) {
+            this.document.body.classList.remove('blocked-scroll');
         }
         else {
-            document.body.className = document.body.className.replace(new RegExp('(^|\\b)' +
+            this.document.body.className = this.document.body.className.replace(new RegExp('(^|\\b)' +
                 'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
         }
     }
