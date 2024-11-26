@@ -5,7 +5,10 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { ClienteComponent } from './components/cliente/cliente.component';
 import { LayoutComponent } from './layout/layout.component';
 import { AppLayoutModule } from './layout/app.layout.module';
-//import { PerfilComponent } from './components/perfil/perfil.component';
+import { CategoriaService } from './inventario/services/categoria.service';
+import { PerfilComponent } from './components/perfil/perfil.component';
+import { TableModule } from 'primeng/table';
+import { InventarioModule } from './inventario/inventario.module';
 
 
 @NgModule({
@@ -16,7 +19,12 @@ import { AppLayoutModule } from './layout/app.layout.module';
   imports: [
     CommonModule,
     AdminRoutingModule,
-    AppLayoutModule
+    AppLayoutModule,
+    TableModule,
+    InventarioModule
+  ],
+  providers: [
+    CategoriaService
   ]
 })
 export class AdminModule { }
