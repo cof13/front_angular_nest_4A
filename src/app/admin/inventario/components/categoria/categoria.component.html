@@ -15,13 +15,13 @@
        <form [formGroup]="categoriaForm">
           <div class="field">
              <label for="name">Nombre</label>
-             <input type="text" pInputText id="name" required autofocus/>
+             <input type="text" pInputText id="name" required autofocus formControlName="nombre"/>
              <small class="ng-dirty ng-invalid">El campo nombre es obligatorio</small>
            </div>
 
            <div class="field">
              <label for="det">Detalle</label>
-             <input type="text" pInputText id="det" required autofocus/>
+             <input type="text" pInputText id="det" required formControlName="detalle"/>
            </div>
         </form>
 
@@ -39,6 +39,7 @@
             <th>ID</th>
             <th>NOMBRE</th>
             <th>DETALLE</th>
+            <th>ACCION</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-categoria>
@@ -46,13 +47,19 @@
             <td>{{ categoria.id }}</td>
             <td>{{ categoria.nombre }}</td>
             <td>{{ categoria.detalle }}</td>
+            <td>
+                <div class="flex">
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editarCategoria(categoria)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="eliminarCategoria(categoria)"></button>
+                </div>
+            </td>
         </tr>
     </ng-template>
 </p-table>
 
     <ul>
-        @for (cat of categorias; track $index) {
-            <li>  {{cat.nombre}} - {{cat.detalle}} </li>
+        @for (cat of categorias; track $index){
+            <li>  {{cat.nombre}} - {{cat.detalle}}</li>
         }
     </ul>
     <table border="1">
@@ -64,16 +71,15 @@
             </tr>
         </thead>
         <tbody>
-            @for (cat of categorias; track $index) {
+            @for (cat of categorias; track $index){
                 <tr>
                     <td>{{cat.id}}</td>
                     <td>{{cat.nombre}}</td>
                     <td>{{cat.detalle}}</td>
                 </tr>
-            }
+        }
         </tbody>
-
-    </table>
+ </table>
 </div>
 
 <!-- columnas  <li>  {{cat.nombre}} - {{cat.detalle}} </li> -->
