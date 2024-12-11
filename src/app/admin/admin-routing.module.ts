@@ -8,24 +8,24 @@ import { ProductoComponent } from './inventario/components/producto/producto.com
 
 const routes: Routes = [
   {
-    path:"",
-    component:AppLayoutComponent,
+    path: "",
+    component: AppLayoutComponent,
+
     children: [
       {
-        path:'perfil',
-        component:PerfilComponent
+        path: "perfil",
+        component: PerfilComponent
       },
       {
         path: "categoria",
-        component:CategoriaComponent
+        component: CategoriaComponent
       },
       {
         path: "producto",
-        component:ProductoComponent
+        component: ProductoComponent
       }
     ]
   },
-  
 ];
 
 @NgModule({

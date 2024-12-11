@@ -13,10 +13,9 @@ import { Component } from '@angular/core';
   styles: `
   h1{
     color: #00f;
-  }
-  `
+  }`
 })
 export class NosotrosComponent {
-  public titulo: string ="Acerca de nosotros"
+  public titulo:string="acerca de nosotros"
 
 }

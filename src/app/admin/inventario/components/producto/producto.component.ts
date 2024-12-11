@@ -1,39 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ProductoService } from '../../services/producto.service';
 
 @Component({
   selector: 'app-producto',
   templateUrl: './producto.component.html',
-  styleUrl: './producto.component.scss'
+  styleUrls: ['./producto.component.scss']
 })
 export class ProductoComponent {
-  products:any[]=[
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" },
-    {id:1, nombre: "Teclado", precio:394.96, categoria_id:5, stock:12, estado: "Completo" }
+  private productoService= inject(ProductoService)
+
+  categorias:any = [
+    { name: 'Ropa Dama', code: 'RD' },
+    { name: 'Ropa Caballero', code: 'RC' },
+    { name: 'Herramientas', code: 'He' },
+    { name: 'Tecnologia', code: 'Tec' },
+    { name: 'Hogar', code: 'Hgr' }
   ];
-  
-  cols: any[]=[];
-  openNew(){
+  products:any[] = [
+    { id: 1, nombre: 'Teclado', precio: 394.96, categoria_id:5,stock:12,estado:"COMPLETO"},
+    { id: 1, nombre: 'Teclado', precio: 394.96, categoria_id:5,stock:12,estado:"COMPLETO"},
+    { id: 1, nombre: 'Teclado', precio: 394.96, categoria_id:5,stock:12,estado:"COMPLETO"},
+    { id: 1, nombre: 'Teclado', precio: 394.96, categoria_id:5,stock:12,estado:"COMPLETO"},
+    { id: 1, nombre: 'Teclado', precio: 394.96, categoria_id:5,stock:12,estado:"COMPLETO"},
+  ];
+  cols:any[]=[];
+  constructor(){
 
+    this.productoService.funListar2().subscribe(
+      (res:any)=>{
+        this.products=res.data
+      }
+    )
   }
 
-  editProduct(prod:any){
-
+  openNew() {
+    console.log('Abrir formulario para crear un nuevo producto');
   }
 
-  deleteProduct(prod:any){
-
+  editProduct(product: any) {
+    console.log('Editar producto:', product);
+  }
+  deleteProduct(product: any) {
+    console.log('Eliminar producto:', product);
+    this.products = this.products.filter(p => p !== product);
   }
 }

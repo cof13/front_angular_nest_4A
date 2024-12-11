@@ -1,42 +1,64 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { error } from 'console';
-import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  private authService=inject(AuthService)
-  private router= inject(Router)
+  loginForm = new FormGroup({
+    email: new FormControl("", [Validators.email, Validators.required]),
+    password: new FormControl("", Validators.required),
+    rememberMe: new FormControl(false)
+  });
 
-  loginForm=new FormGroup({
-    email:new FormControl("", [Validators.email, Validators.required]),//valores k kedaran por defecto
-    password: new FormControl("", Validators.required)//valores k kedaran por defecto
-  })
-
-  funIngresar(){
-    
-    //si kiero todos los datos eliminados se borra el /1 y lo sustituimos por /todos
-    this.authService.loginConNest(this.loginForm.value).subscribe(
-      (res)=>{
-        console.log(res)
-        this.router.navigate(["/admin"])
-      },
-      (error)=>{
-        console.log(error)
-      }
-      
-      
-    )
-    //alert("Ingresando...")
-    //me quedo en la diapositiva 31 osea hacer la 31 
+  ngOnInit(): void {
+    if (typeof window !== 'undefined' && localStorage.getItem('authToken')) {
+      this.loginForm.get('rememberMe')?.setValue(true);
+    }
   }
 
-}
+  funIngresar() {
+    const rememberMe = this.loginForm.get('rememberMe')?.value;
+    this.authService.loginConNest(this.loginForm.value).subscribe(
+      (res) => {
+        console.log(res);
+        const tokenExpirationTime = rememberMe ? 2 * 60 * 1000 : 1 * 60 * 1000; 
+        this.startTimer(tokenExpirationTime);
+  
+
+        if (typeof window !== 'undefined') {
+          if (rememberMe) {
+            localStorage.setItem('authToken', res.token); 
+          } else {
+            sessionStorage.setItem('authToken', res.token); 
+          }
+        }
+  
+        this.router.navigate(["admin"]);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  
+  startTimer(expirationTime: number) {
+    let timer = expirationTime / 1000;
+    const interval = setInterval(() => {
+      console.log(`Tiempo restante: ${timer} segundos`);
+      timer--;
+  
+      if (timer < 0) {
+        clearInterval(interval);
+        console.log('El token ha expirado');
+      }
+    }, 1000);
+  }}
+  
