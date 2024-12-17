@@ -15,34 +15,39 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             {
-                label: 'Administracion',
+                label: 'Administración',
                 items: [
                     { label: 'Admin', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
-                    { label: 'perfil', icon: 'pi pi-fw pi-home', routerLink: ['/admin/perfil'] }
+                    { label: 'Perfil', icon: 'pi pi-fw pi-user', routerLink: ['/admin/perfil'] }
                 ]
             },
             {
                 label: 'Inventario',
                 items: [
-                    { label: 'Categoria', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/categoria'] },
-                    { label: 'Producto', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/producto'] }
+                    { label: 'Categoría', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/categoria'] },
+                    { label: 'Producto', icon: 'pi pi-fw pi-check-square', routerLink: ['/admin/producto'] },
+                    
                 ]
             },
             {
                 label: 'Pedidos',
                 items: [
                     { label: 'Lista Pedidos', icon: 'pi pi-fw pi-eye', routerLink: ['/admin/pedido'], badge: 'NEW' },
-                    { label: 'Nuevo Pedido', icon: 'pi pi-fw pi-eye', routerLink: ['/admin/pedido/nuevo'], badge: 'NEW' },
-                    { label: 'Cliente', icon: 'pi pi-fw pi-eye', routerLink: ['/admin/cliente'], badge: 'NEW' },
+                    { label: 'Nuevo Pedido', icon: 'pi pi-fw pi-moon', routerLink: ['/admin/pedido/nuevo'], badge: 'NEW' },
+                    { label: 'Clientes', icon: 'pi pi-fw pi-user', routerLink: ['/admin/cliente'], target: '_blank' }
                 ]
             },
             {
-                label: 'Roles y Usuario',
+                label: 'Roles y usuarios',
                 items: [
-                    { label: 'Usuario', icon: 'pi pi-fw pi-prime', routerLink: ['/utilities/icons'] },
+                    { label: 'Usuarios', icon: 'pi pi-fw pi-user', routerLink: ['/utilities/icons'] },
                     { label: 'Roles', icon: 'pi pi-fw pi-desktop', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
                 ]
-            }
+            },
+            
+               
+            
+            
         ];
     }
 }

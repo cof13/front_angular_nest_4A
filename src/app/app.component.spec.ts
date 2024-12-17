@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'front_angular_nest' title`, () => {
+  it(`should have the '3B_Edison_Flores_Front' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('front_angular_nest');
+    expect(app.title).toEqual('3B_Edison_Flores_Front');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, front_angular_nest');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, 3B_Edison_Flores_Front');
   });
 });

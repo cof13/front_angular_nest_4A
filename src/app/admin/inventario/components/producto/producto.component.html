@@ -1,54 +1,80 @@
-<div class="card px-6 py-6">
-    <h1>Producto</h1>
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="openNew()"></button>
+                    </div>
+                </ng-template>
 
-    <p-toolbar styleClass="mb-4">
-        <p-dropdown 
-            [options]="categorias" 
-            optionLabel="name" 
-            [showClear]="true" 
-            placeholder="Filtrar por Categorías">
-        </p-dropdown>
-        <ng-template pTemplate="left">
-            <div class="my-2">
-                <button 
-                    pButton 
-                    pRipple 
-                    label="Exportar" 
-                    icon="pi pi-upload" 
-                    class="p-button-help" 
-                    (click)="dt.exportCSV()">
-                </button>
-            </div>
-        </ng-template>
-    </p-toolbar>
-<p-table #dt [value]="products" [paginator]="true" [rows]="10" [responsiveLayout]="'scroll'">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Categoría</th>
-            <th>Stock</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-product>
-        <tr>
-            <td>{{ product.id }}</td>
-            <td>{{ product.nombre }}</td>
-            <td>{{ product.precio }}</td>
-            <td>{{ product.categoria_id }}</td>
-            <td>{{ product.stock }}</td>
-            <td>{{ product.estado }}</td>
-            <td>
-                <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                    (click)="editProduct(product)">
-                </button>
-                <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                    (click)="deleteProduct(product)">
-                </button>
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+            <p-table #dt [value]="products" [columns]="cols" responsiveLayout="scroll" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Administrar Productos</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text"  placeholder="Buscando..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="id" >Id <p-sortIcon field="code"></p-sortIcon></th >
+                        <th pSortableColumn="nombre">Nombre<p-sortIcon field="name"></p-sortIcon></th >
+                        <th >Image</th >
+                        <th pSortableColumn="precio">Precio<p-sortIcon field="price"></p-sortIcon></th >
+                        <th pSortableColumn="categoria_id">Categoria<p-sortIcon field="category"></p-sortIcon></th >
+                        <th pSortableColumn="rating">Reviews<p-sortIcon field="rating"></p-sortIcon></th >
+                        <th pSortableColumn="estado">Estado<p-sortIcon field="inventoryStatus"></p-sortIcon></th >
+                            
+                    </tr>
+                    
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        
+                        <td style="width:14%; min-width:2rem;"><span class="p-column-title">Id</span>
+                            {{product.code || product.id}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Nombre</span>
+                            {{product.nombre}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Imagen</span>
+                            <img src="https://i.blogs.es/0ca9a6/aa/1366_2000.jpeg" [alt]="product.name" width="100" class="shadow-4" />
+                        </td>
+                        <td style="width:14%; min-width:8rem;">
+                            <span class="p-column-title">Precio</span>
+                            {{product.precio| currency:'USD'}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Categoria</span>
+                            {{product.categoria_id}}
+                        </td >
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Stock</span>
+                            {{product.stock}}
+                        </td>
+                        <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Accion</span>
+                            <span [class]="'product-badge status-' + (product.estado ? product.estado.toLowerCase() : '')">{{product.estado}}</span>
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(products)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(products)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+              
+            </p-table>
+        </div>
+    </div>
+</div>

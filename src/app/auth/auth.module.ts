@@ -1,24 +1,32 @@
+// auth.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { AuthRoutingModule } from './auth-routing.module';
-import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './components/login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+
 import { AuthService } from './services/auth.service';
-//import { ButtonModule } from 'primeng/button';
-//import { PasswordModule } from 'primeng/password';
-import { PrimengModule } from '../primeng/primeng.module';
+import { MessageService } from 'primeng/api';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { AuthInterceptor } from './auth.interceptor';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @NgModule({
-  providers:[
-    AuthService
-  ],
-  declarations:[
-    LoginComponent,
+  declarations: [
     RegisterComponent,
+    LoginComponent,
+    ForgotPasswordComponent,
     ResetPasswordComponent
   ],
   imports: [
@@ -26,8 +34,20 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
     AuthRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    PrimengModule,
-    FormsModule
+    InputTextModule,
+    PasswordModule,
+    CheckboxModule,
+    ButtonModule,
+    ToastModule,
+    ProgressSpinnerModule
+  ],
+  providers: [
+    {provide:HTTP_INTERCEPTORS,
+      useClass:AuthInterceptor,
+      multi:true
+    },
+    AuthService,
+    MessageService
   ]
 })
 export class AuthModule { }

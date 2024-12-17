@@ -1,4 +1,4 @@
 export const environment = {
-    production:false,
-    urlServidor: "http://127.0.0.1:3000"
+    production: false,
+    api: 'http://localhost:3000',
 };

@@ -1,64 +1,96 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { LayoutService } from '../../../admin/layout/service/app.layout.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  providers: [MessageService]
 })
 export class LoginComponent implements OnInit {
-  private authService = inject(AuthService);
-  private router = inject(Router);
-
   loginForm = new FormGroup({
-    email: new FormControl("", [Validators.email, Validators.required]),
-    password: new FormControl("", Validators.required),
+    mail: new FormControl('', [Validators.email, Validators.required]),
+    password: new FormControl('', Validators.required),
     rememberMe: new FormControl(false)
   });
 
-  ngOnInit(): void {
-    if (typeof window !== 'undefined' && localStorage.getItem('authToken')) {
-      this.loginForm.get('rememberMe')?.setValue(true);
+  constructor(
+    public layoutService: LayoutService,
+    private authService: AuthService,
+    private router: Router,
+    private messageService: MessageService
+  ) {}
+
+  ngOnInit() {
+    if (typeof window !== 'undefined') { // Verificar si estamos en el cliente
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      const rememberedEmail = localStorage.getItem('rememberedEmail');
+      const tempEmail = sessionStorage.getItem('tempEmail');
+
+      if (token) {
+        this.router.navigate(['/admin']);
+      }
+
+      if (rememberedEmail) {
+        // Si el correo está en localStorage, lo establecemos y marcamos "Remember me"
+        this.loginForm.get('mail')?.setValue(rememberedEmail);
+        this.loginForm.get('rememberMe')?.setValue(true);
+      } else if (tempEmail) {
+        // Si hay un correo temporal en sessionStorage, lo establecemos
+        this.loginForm.get('mail')?.setValue(tempEmail);
+      }
+
+      // Observamos los cambios en el campo "mail" para almacenarlo temporalmente
+      this.loginForm.get('mail')?.valueChanges.subscribe(value => {
+        sessionStorage.setItem('tempEmail', value || '');
+      });
     }
   }
 
   funIngresar() {
-    const rememberMe = this.loginForm.get('rememberMe')?.value;
-    this.authService.loginConNest(this.loginForm.value).subscribe(
-      (res) => {
-        console.log(res);
-        const tokenExpirationTime = rememberMe ? 2 * 60 * 1000 : 1 * 60 * 1000; 
-        this.startTimer(tokenExpirationTime);
-  
+    if (this.loginForm.valid) {
+      const { mail, password, rememberMe } = this.loginForm.value;
 
-        if (typeof window !== 'undefined') {
+      this.authService.loginConNest({ mail, password }).subscribe(
+        (res) => {
+          // Guardar el token en localStorage o sessionStorage según el caso
           if (rememberMe) {
-            localStorage.setItem('authToken', res.token); 
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('rememberedEmail', mail || '');
           } else {
-            sessionStorage.setItem('authToken', res.token); 
+            sessionStorage.setItem('token', res.token);
+            localStorage.removeItem('rememberedEmail');
           }
+
+          // Limpiar el correo temporal
+          sessionStorage.removeItem('tempEmail');
+
+          // Mostrar mensaje de éxito y redirigir
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Login exitoso',
+            detail: 'Has iniciado sesión correctamente'
+          });
+          this.router.navigate(['/admin']);
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Credenciales incorrectas'
+          });
         }
-  
-        this.router.navigate(["admin"]);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      );
+    } else {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Formulario inválido',
+        detail: 'Por favor, complete todos los campos'
+      });
+    }
   }
-  
-  startTimer(expirationTime: number) {
-    let timer = expirationTime / 1000;
-    const interval = setInterval(() => {
-      console.log(`Tiempo restante: ${timer} segundos`);
-      timer--;
-  
-      if (timer < 0) {
-        clearInterval(interval);
-        console.log('El token ha expirado');
-      }
-    }, 1000);
-  }}
-  
+}

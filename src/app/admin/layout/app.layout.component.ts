@@ -22,7 +22,7 @@ export class AppLayoutComponent implements OnDestroy {
 
     @ViewChild(AppTopBarComponent) appTopbar!: AppTopBarComponent;
 
-    constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router,@Inject(DOCUMENT) private document: Document) {
+    constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router, @Inject(DOCUMENT) private document : Document) {
         this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
             if (!this.menuOutsideClickListener) {
                 this.menuOutsideClickListener = this.renderer.listen('document', 'click', event => {

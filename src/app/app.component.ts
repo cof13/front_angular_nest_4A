@@ -9,5 +9,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'front_angular_nest';
+  title = '3B_Edison_Flores_Front';
 }

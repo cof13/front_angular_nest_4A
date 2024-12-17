@@ -2,13 +2,17 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } fr
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-//import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
-  // providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration()]
-  providers: [provideRouter(routes), provideHttpClient(withFetch()),importProvidersFrom(BrowserModule),importProvidersFrom(BrowserAnimationsModule)]
+  providers: [
+    provideRouter(routes), // Configuración de rutas
+    provideClientHydration(), // Soporte para Hydration si usas SSR
+    importProvidersFrom(BrowserModule), // Importar BrowserModule
+    importProvidersFrom(BrowserAnimationsModule), // Importar BrowserAnimationsModule
+    provideHttpClient(withFetch()), // Configurar HttpClient con fetch
+    provideZoneChangeDetection({ eventCoalescing: true }) // Optimización del cambio de zonas
+  ]
 };
-//,provideHttpClient(withFetch())

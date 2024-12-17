@@ -5,17 +5,17 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   template: `
-  <h1>{{titulo}}</h1>
+    <h1> {{Titulo}} </h1>
     <p>
-      nosotros works!
+      nostros works!
     </p>
   `,
   styles: `
   h1{
     color: #00f;
-  }`
+  }
+  `
 })
 export class NosotrosComponent {
-  public titulo:string="acerca de nosotros"
-
+  public Titulo : string = "Acerca de nostros"
 }
